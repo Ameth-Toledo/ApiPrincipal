@@ -16,17 +16,14 @@ type DependenciesAsignature struct {
 	DeleteAsignatureController   *controllers.DeleteAsignatureController
 }
 
-// In infraestructure/dependencies.go
 func InitAsignature() *DependenciesAsignature {
 	ps := database.NewMySQL()
 
-	// Initialize RabbitMQ client
 	rmqClient, err := adapter.NewRabbitMQAdapter()
 	if err != nil {
 		log.Fatalf("Error initializing RabbitMQ: %v", err)
 	}
 
-	// Pass both application.CreateAsignature, ps, and rmqClient to the controller constructor
 	return &DependenciesAsignature{
 		CreateAsignatureController:   controllers.NewCreateAsignatureController(application.NewCreateAsignature(ps, rmqClient), ps), // Pass both parameters
 		ListAsignatureController:     controllers.NewListAsignatureController(application.NewListAsignature(ps)),
